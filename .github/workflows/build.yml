@@ -39,3 +39,7 @@ jobs:
           docker tag $IMAGE_NAME elcapera/myjavaapp:latest
           docker push $IMAGE_NAME
           docker push elcapera/myjavaapp:latest
+      # Run Docker Container with 3 Parameters
+      - name: Run Docker Container
+        run: |
+          docker run --rm elcapera/myjavaapp:latest "http://example.com" "admin" "password123"
