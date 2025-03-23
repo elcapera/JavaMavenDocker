@@ -1,0 +1,39 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set Up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build JAR with Maven
+        run: |
+          mvn clean package
+          mkdir -p deploy
+          cp target/app-*.jar deploy/
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_USERNAME }}
+
+      - name: Build and Push Docker Image
+        run: |
+          BUILD_ID=$(date +%Y%m%d-%H%M%S)
+          IMAGE_NAME="elcapera/myjavaapp:${BUILD_ID}"
+          docker build -t $IMAGE_NAME .
+          docker push $IMAGE_NAME
