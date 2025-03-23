@@ -36,4 +36,6 @@ jobs:
           BUILD_ID=$(date +%Y%m%d-%H%M%S)
           IMAGE_NAME="elcapera/myjavaapp:${BUILD_ID}"
           docker build -t $IMAGE_NAME .
+          docker tag $IMAGE_NAME elcapera/myjavaapp:latest
           docker push $IMAGE_NAME
+          docker push elcapera/myjavaapp:latest
